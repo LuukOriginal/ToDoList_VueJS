@@ -8,7 +8,6 @@
 </template>
 
 <script>
-// import uuid from 'uuid'; If id is not defined in database
 export default {
     name: "AddTodo",
     data() {
@@ -20,10 +19,10 @@ export default {
         addTodo(e) {
             e.preventDefault();
             const newTodo = {
-                // id: uuid.v4(), If id is not defined in database
                 title: this.title,
                 completed: false
             }
+            console.log(newTodo)
             //send up to parent
             this.$emit('add-todo',newTodo)
             this.title = '';

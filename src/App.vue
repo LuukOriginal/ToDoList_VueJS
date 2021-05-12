@@ -10,8 +10,8 @@
 import Header from './components/Layout/Header'
 import Todos from './components/Todos';
 import AddTodo from './components/AddTodo';
-import Axios from 'axios';
 import axios from 'axios';
+import uuid from 'uuid';
 
 
 export default {
@@ -31,20 +31,34 @@ export default {
       axios.delete(`https://jsonplaceholder.typicode.com/todos${id}`)
       .then(this.todos = this.todos.filter(todo => todo.id !== id))
       .catch(err => console.log(err));
+      console.log("deleted")
     },
     addTodo(NewTodo) {
       const {title, completed} = NewTodo;
+      var ID = uuid.v4() //If id is not defined in database
 
       axios.post('https://jsonplaceholder.typicode.com/todos', {
+        completed,
         title,
-        completed
       })
-      .then(res => this.todos = [...this.todos, res.data])
+      .then(res => 
+      {
+        if(res.data.id == 201)
+        {
+          this.todos = [...this.todos, {id: ID, title: title, completed: completed}]
+          console.log(this.todos)
+        }
+        else
+        {
+          this.todos = [...this.todos, res.data]
+          console.log(this.todos)
+        }
+      })
       .catch(err => console.log(err));
     }
   },
   created() {
-    Axios.get('https://jsonplaceholder.typicode.com/todos?_limit=15')
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=0')
     .then(res => this.todos = res.data)
     .catch(err => console.log(err));
   }
